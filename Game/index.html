@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake Game</title>
+    <style>
+        body {
+            background: linear-gradient(to right, #e0e5ec, #d0d5e3);
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: #333;
+        }
+
+        .game-container {
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 15px 15px 30px rgba(190, 195, 201, 0.5), -15px -15px 30px rgba(255, 255, 255, 0.5);
+            padding: 30px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #3498db;
+            margin-bottom: 20px;
+        }
+
+        .game-area {
+            width: 300px;
+            height: 300px;
+            border: 3px solid #3498db;
+            border-radius: 15px;
+            position: relative;
+            margin: 0 auto 20px;
+            box-shadow: inset 5px 5px 10px rgba(190, 195, 201, 0.5), inset -5px -5px 10px rgba(255, 255, 255, 0.5);
+        }
+
+        .snake-body, .food {
+            width: 10px;
+            height: 10px;
+            position: absolute;
+            border-radius: 50%;
+        }
+
+        .snake-body {
+            background: radial-gradient(circle at 50% 50%, #2ecc71, #27ae60);
+            box-shadow: 0 0 5px rgba(46, 204, 113, 0.5);
+        }
+
+        .food {
+            background: radial-gradient(circle at 50% 50%, #e74c3c, #c0392b);
+            box-shadow: 0 0 5px rgba(231, 76, 60, 0.5);
+        }
+
+        .controls, .game-buttons {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+            .controls button, .game-buttons button {
+                width: 70px;
+                height: 70px;
+                border: none;
+                background: #3498db;
+                color: white;
+                font-size: 24px;
+                border-radius: 50%;
+                box-shadow: 8px 8px 16px rgba(190, 195, 201, 0.5), -8px -8px 16px rgba(255, 255, 255, 0.5);
+                cursor: pointer;
+                transition: all 0.3s ease;
+                text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+            }
+
+                .controls button:hover, .game-buttons button:hover {
+                    background: radial-gradient(circle at 50% 50%, #2980b9, #3498db);
+                    transform: translateY(-3px);
+                    box-shadow: 4px 4px 8px rgba(190, 195, 201, 0.5), -4px -4px 8px rgba(255, 255, 255, 0.5);
+                }
+
+                .controls button:active, .game-buttons button:active {
+                    transform: translateY(0);
+                    box-shadow: 2px 2px 4px rgba(190, 195, 201, 0.5), -2px -2px 4px rgba(255, 255, 255, 0.5);
+                }
+
+            .game-buttons button {
+                width: auto;
+                border-radius: 20px;
+                padding: 10px 20px;
+            }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>Snake Game</h1>
+        <div id="gameCanvas" class="game-area"></div>
+        <button id="startBtn" class="game-buttons">Start Game</button>
+        <div class="controls" style="display: none;">
+            <button id="leftBtn" aria-label="Move Left">⬅️</button>
+            <button id="upBtn" aria-label="Move Up">⬆️</button>
+            <button id="rightBtn" aria-label="Move Right">➡️</button>
+            <button id="downBtn" aria-label="Move Down">⬇️</button>
+        </div>
+        <div id="gameOverMessage" style="display: none;">
+            <p id="scoreDisplay"></p>
+            <button id="playAgainBtn" class="game-buttons">Play Again</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const canvas = document.getElementById('gameCanvas');
+            let snake = [{ x: 150, y: 150 }, { x: 140, y: 150 }, { x: 130, y: 150 }];
+            let dx = 10;
+            let dy = 0;
+            let foodX, foodY;
+            let score = 0;
+            let gameLoop;
+
+            const startBtn = document.getElementById('startBtn');
+            const playAgainBtn = document.getElementById('playAgainBtn');
+            const scoreDisplay = document.getElementById('scoreDisplay');
+            const gameOverMessage = document.getElementById('gameOverMessage');
+
+            // Game Functions
+            function main() {
+                if (didGameEnd()) {
+                    endGame();
+                    return;
+                }
+                clearCanvas();
+                moveSnake();
+                drawFood();
+                drawSnake();
+            }
+
+            function clearCanvas() {
+                canvas.innerHTML = ''; // Clear the canvas by removing all child elements
+            }
+
+            function drawSnake() {
+                snake.forEach(segment => {
+                    const snakePart = document.createElement('div');
+                    snakePart.className = 'snake-body';
+                    snakePart.style.left = segment.x + 'px';
+                    snakePart.style.top = segment.y + 'px';
+                    canvas.appendChild(snakePart);
+                });
+            }
+
+            function drawFood() {
+                const foodPart = document.createElement('div');
+                foodPart.className = 'food';
+                foodPart.style.left = foodX + 'px';
+                foodPart.style.top = foodY + 'px';
+                canvas.appendChild(foodPart);
+            }
+
+            function moveSnake() {
+                const head = { x: snake[0].x + dx, y: snake[0].y + dy };
+                snake.unshift(head);
+
+                if (head.x === foodX && head.y === foodY) {
+                    score++;
+                    placeFood();
+                } else {
+                    snake.pop();
+                }
+            }
+
+            function placeFood() {
+                foodX = Math.floor(Math.random() * 30) * 10;
+                foodY = Math.floor(Math.random() * 30) * 10;
+            }
+
+            function didGameEnd() {
+                for (let i = 4; i < snake.length; i++) {
+                    if (snake[i].x === snake[0].x && snake[i].y === snake[0].y) return true;
+                }
+                const hitLeftWall = snake[0].x < 0;
+                const hitRightWall = snake[0].x > 290; // Adjusted for canvas size
+                const hitTopWall = snake[0].y < 0;
+                const hitBottomWall = snake[0].y > 290; // Adjusted for canvas size
+                return hitLeftWall || hitRightWall || hitTopWall || hitBottomWall;
+            }
+
+            function endGame() {
+                clearInterval(gameLoop);
+                document.querySelector('.controls').style.display = 'none';
+                startBtn.style.display = 'none';
+                gameOverMessage.style.display = 'block';
+                scoreDisplay.textContent = `Game Over! Your score: ${score}`;
+            }
+
+            function resetGame() {
+                snake = [{ x: 150, y: 150 }, { x: 140, y: 150 }, { x: 130, y: 150 }];
+                dx = 10;
+                dy = 0;
+                score = 0;
+                gameOverMessage.style.display = 'none';
+                document.querySelector('.controls').style.display = 'flex';
+                startBtn.style.display = 'none';
+                placeFood();
+                gameLoop = setInterval(main, 100);
+            }
+
+            // Event Listeners for Movement (will be enabled after game starts)
+
+            // Start Game Button
+            startBtn.addEventListener('click', () => {
+                if (!gameLoop) {
+                    document.querySelector('.controls').style.display = 'flex';
+                    startBtn.style.display = 'none';
+                    gameLoop = setInterval(main, 100);
+
+                    // Enable movement controls
+                    document.addEventListener('keydown', (e) => {
+                        const goingUp = dy === -10;
+                        const goingDown = dy === 10;
+                        const goingRight = dx === 10;
+                        const goingLeft = dx === -10;
+
+                        if (e.key === 'ArrowLeft' && !goingRight) {
+                            dx = -10; dy = 0;
+                        }
+                        if (e.key === 'ArrowUp' && !goingDown) {
+                            dx = 0; dy = -10;
+                        }
+                        if (e.key === 'ArrowRight' && !goingLeft) {
+                            dx = 10; dy = 0;
+                        }
+                        if (e.key === 'ArrowDown' && !goingUp) {
+                            dx = 0; dy = 10;
+                        }
+                    });
+
+                    // Button Event Listeners for Movement
+                    document.getElementById('leftBtn').addEventListener('click', () => {
+                        if (dx !== 10) { dx = -10; dy = 0; }
+                    });
+
+                    document.getElementById('upBtn').addEventListener('click', () => {
+                        if (dy !== 10) { dx = 0; dy = -10; }
+                    });
+
+                    document.getElementById('rightBtn').addEventListener('click', () => {
+                        if (dx !== -10) { dx = 10; dy = 0; }
+                    });
+
+                    document.getElementById('downBtn').addEventListener('click', () => {
+                        if (dy !== -10) { dx = 0; dy = 10; }
+                    });
+                }
+            });
+
+            // Play Again Button
+            playAgainBtn.addEventListener('click', () => {
+                resetGame();
+            });
+
+            placeFood(); // Place food at the start of the page load
+        });
+    </script>
+</body>
+</html>

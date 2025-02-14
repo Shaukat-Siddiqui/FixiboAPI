@@ -37,27 +37,7 @@
         <div id="countdown" class="countdown"></div>
     </div>
 
-    <div class="spinner-border text-primary" role="status">
-    <span class="sr-only">Loading...</span>
-</div>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const spinner = document.querySelector('.spinner-border');
-        let count = 0;
-
-        setInterval(() => {
-            count = (count + 1) % 4; // Cycle through 0-3
-            spinner.classList.remove('text-primary', 'text-secondary', 'text-success', 'text-danger');
-            switch(count) {
-                case 0: spinner.classList.add('text-primary'); break;
-                case 1: spinner.classList.add('text-secondary'); break;
-                case 2: spinner.classList.add('text-success'); break;
-                case 3: spinner.classList.add('text-danger'); break;
-            }
-        }, 1000);
-    });
-</script>
+   
     
     <script>
         function countdown() {

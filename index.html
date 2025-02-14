@@ -14,7 +14,6 @@
             align-items: center;
             height: 100vh;
             text-align: center;
-            flex-direction: column;
         }
 
         .container {
@@ -25,7 +24,7 @@
             font-size: 24px;
             font-weight: bold;
             margin-top: 20px;
-            margin-bottom: 30px;
+            margin-bottom: 50px;
         }
 
         .logo {
@@ -40,7 +39,7 @@
             background: orange;
             position: relative;
             animation: l9-0 1.5s infinite linear;
-            margin: 20px auto; 
+            margin: 20px auto;
         }
 
         .loader:before,
@@ -67,31 +66,31 @@
         }
 
         @keyframes l9-0 {
-            0%,10% { transform: translateY(0%) scaleY(1) }
-            49.99% { transform: translateY(-50%) scaleY(1) }
-            50% { transform: translateY(-50%) scaleY(-1) }
-            90%,100% { transform: translateY(-100%) scaleY(-1) }
+            0%,10% {
+                transform: translateY(0%) scaleY(1)
+            }
+
+            49.99% {
+                transform: translateY(-50%) scaleY(1)
+            }
+
+            50% {
+                transform: translateY(-50%) scaleY(-1)
+            }
+
+            90%,100% {
+                transform: translateY(-100%) scaleY(-1)
+            }
         }
 
         @keyframes l9-1 {
-            10%,90% { transform: rotate(0deg) }
-            50% { transform: rotate(calc(var(--s,1)*180deg)) }
-        }
+            10%,90% {
+                transform: rotate(0deg)
+            }
 
-        .snake-button {
-            margin-top: 20px;
-            padding: 10px 20px;
-            font-size: 18px;
-            background-color: #28a745;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        .snake-button:hover {
-            background-color: #218838;
+            50% {
+                transform: rotate(calc(var(--s,1)*180deg))
+            }
         }
     </style>
 </head>
@@ -102,7 +101,7 @@
         <p class="lead">Our website is under construction, but we are preparing something amazing for you. Stay tuned!</p>
         <div id="countdown" class="countdown"></div>
         <div class="loader"></div>
-        <button class="snake-button" onclick="playSnake()">Play Snake Game</button>
+        <a href="Game/index.html" class="btn btn-primary mt-3">Play Snake Game</a>
     </div>
 
     <script>
@@ -118,7 +117,7 @@
                 const seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
 
                 document.getElementById("countdown").innerHTML = `
-                    ${days}d ${hours}h ${minutes}m ${seconds}s Remaining`;
+                            ${days}d ${hours}h ${minutes}m ${seconds}s Remaining`;
 
                 if (remainingTime < 0) {
                     clearInterval(interval);
@@ -127,10 +126,6 @@
             }, 1000);
         }
         countdown();
-
-        function playSnake() {
-            window.location.href = "Game/index.html";
-        }
     </script>
 </body>
 </html>

@@ -14,18 +14,82 @@
             height: 100vh;
             text-align: center;
         }
+
         .container {
             max-width: 600px;
         }
+
         .countdown {
             font-size: 24px;
             font-weight: bold;
             margin-top: 20px;
+            margin-bottom: 50px;
         }
+
         .logo {
             width: 300px;
             height: 100px;
             object-fit: contain;
+        }
+
+        .loader {
+            width: 40px;
+            height: 20px;
+            background: orange;
+            position: relative;
+            animation: l9-0 1.5s infinite linear;
+            margin: 20px auto; /* Center the loader horizontally */
+        }
+
+            .loader:before,
+            .loader:after {
+                content: "";
+                position: absolute;
+                background: inherit;
+                bottom: 100%;
+                width: 50%;
+                height: 100%;
+                animation: inherit;
+                animation-name: l9-1;
+            }
+
+            .loader:before {
+                left: 0;
+                transform-origin: bottom left;
+                --s: -1;
+            }
+
+            .loader:after {
+                right: 0;
+                transform-origin: bottom right;
+            }
+
+        @keyframes l9-0 {
+            0%,10% {
+                transform: translateY(0%) scaleY(1)
+            }
+
+            49.99% {
+                transform: translateY(-50%) scaleY(1)
+            }
+
+            50% {
+                transform: translateY(-50%) scaleY(-1)
+            }
+
+            90%,100% {
+                transform: translateY(-100%) scaleY(-1)
+            }
+        }
+
+        @keyframes l9-1 {
+            10%,90% {
+                transform: rotate(0deg)
+            }
+
+            50% {
+                transform: rotate(calc(var(--s,1)*180deg))
+            }
         }
     </style>
 </head>
@@ -35,25 +99,25 @@
         <h1 class="display-4">We're Coming Soon!</h1>
         <p class="lead">Our website is under construction, but we are preparing something amazing for you. Stay tuned!</p>
         <div id="countdown" class="countdown"></div>
+
+        <div class="loader"></div>
     </div>
 
-   
-    
     <script>
         function countdown() {
             const launchDate = new Date("2025-04-01T00:00:00").getTime();
             const interval = setInterval(() => {
                 const now = new Date().getTime();
                 const remainingTime = launchDate - now;
-                
+
                 const days = Math.floor(remainingTime / (1000 * 60 * 60 * 24));
                 const hours = Math.floor((remainingTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 const minutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
                 const seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
-                
+
                 document.getElementById("countdown").innerHTML = `
-                    ${days}d ${hours}h ${minutes}m ${seconds}s Remaining`;
-                
+                            ${days}d ${hours}h ${minutes}m ${seconds}s Remaining`;
+
                 if (remainingTime < 0) {
                     clearInterval(interval);
                     document.getElementById("countdown").innerHTML = "We're Live!";

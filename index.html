@@ -1,403 +1,394 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FixiBo - Service Management Platform</title>
+    <title>FixiBo - Streamlined Service Management</title>
 
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <!-- Bootstrap CSS (Grid Only) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap-grid.min.css" rel="stylesheet">
 
-    <!-- Font Awesome (for icons) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-    <!-- Google Fonts (Optional - for a slightly nicer font) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Optional: Tailwind configuration can go here if needed
+        tailwind.config = {
+            theme: {
+                extend: {
+                    // Example: Add custom colors or fonts
+                    // colors: {
+                    //   primary: '#3b82f6', // blue-500
+                    // }
+                }
+            }
+        }
+    </script>
 
     <!-- Custom CSS -->
     <style>
-        :root {
-            --bs-primary-rgb: 13, 110, 253; /* Define Bootstrap primary color RGB for gradients */
-            --bs-info-rgb: 13, 202, 240; /* Define Bootstrap info color RGB */
+        .hero-bg {
+            background: linear-gradient(to right, rgba(59, 130, 246, 0.92), rgba(37, 99, 235, 0.98)); /* Slightly adjusted gradient */
+        }
+        /* Placeholder for images if you don't have actual ones yet */
+        .img-placeholder {
+            display: flex;
+            flex-direction: column; /* Stack text */
+            align-items: center;
+            justify-content: center;
+            background-color: #e5e7eb; /* gray-200 */
+            border: 2px dashed #9ca3af; /* gray-400 */
+            color: #4b5563; /* gray-600 */
+            font-size: 0.9rem;
+            text-align: center;
+            padding: 2rem 1rem;
+            border-radius: 0.375rem; /* rounded-md */
+            min-height: 250px; /* Give it some default height */
         }
 
-        body {
-            background-color: #f8f9fa;
-            font-family: 'Poppins', sans-serif; /* Apply Poppins font */
-            color: #495057; /* Slightly darker text color */
+            .img-placeholder span {
+                display: block;
+                margin-bottom: 0.5rem;
+            }
+        /* Subtle animation for cards on hover */
+        .hover-lift {
+            transition: all 0.3s ease-in-out;
         }
 
-        .hero-section {
-            /* Subtle gradient background */
-            background: linear-gradient(135deg, rgba(var(--bs-primary-rgb), 0.1), rgba(var(--bs-info-rgb), 0.1));
-            padding: 3rem 0;
-            margin-bottom: 4rem;
-            border-bottom: 1px solid #dee2e6;
-        }
-
-            .hero-section h1 {
-                color: #0d6efd; /* Blue color for the main heading */
-                font-weight: 700; /* Bolder heading */
+            .hover-lift:hover {
+                transform: translateY(-4px);
+                box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-lg */
             }
 
-            .hero-section p {
-                font-size: 1.1rem;
-                color: #6c757d; /* Muted text color */
+        /* Mobile Menu Transition */
+        #mobile-menu {
+            transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+        }
+
+            #mobile-menu.active {
+                max-height: 500px; /* Adjust as needed */
+                opacity: 1;
             }
-
-        .card {
-            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-            border: none;
-            border-radius: 0.5rem; /* Slightly more rounded corners */
-            box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.08); /* Softer shadow */
-            background-color: #fff; /* Ensure cards are white */
-        }
-
-            .card:hover {
-                transform: translateY(-8px); /* More pronounced lift */
-                box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.12); /* Enhanced shadow on hover */
-            }
-
-        .card-header {
-            background-color: transparent; /* Remove header background */
-            border-bottom: 1px solid #e9ecef; /* Lighter border */
-            padding: 1.25rem 1.5rem; /* More padding */
-            font-weight: 600; /* Bolder header text */
-            color: #343a40; /* Darker header text */
-        }
-
-            .card-header h3 {
-                margin-bottom: 0;
-                font-size: 1.35rem; /* Slightly smaller H3 */
-                display: flex;
-                align-items: center;
-                gap: 0.75rem;
-            }
-
-        .card-body {
-            padding: 1.5rem;
-        }
-
-            .card-body ul {
-                padding-left: 0; /* Remove default padding */
-                list-style: none; /* Remove default bullets */
-                margin-bottom: 1.5rem;
-            }
-
-                .card-body ul li {
-                    margin-bottom: 0.75rem; /* Increased space */
-                    display: flex;
-                    align-items: center;
-                    gap: 0.6rem;
-                    color: #495057; /* Standard text color */
-                    font-size: 0.95rem;
-                }
-
-                .card-body ul i.fa-check-circle,
-                .card-body ul i.fa-tools,
-                .card-body ul i.fa-truck-fast,
-                .card-body ul i.fa-credit-card,
-                .card-body ul i.fa-users-cog,
-                .card-body ul i.fa-boxes-stacked,
-                .card-body ul i.fa-chart-line {
-                    color: var(--list-icon-color); /* Use CSS variable */
-                    width: 20px; /* Ensure consistent icon width */
-                    text-align: center;
-                }
-
-        /* Set icon colors per card */
-        .customer-card ul i {
-            --list-icon-color: #0d6efd;
-        }
-
-        .company-card ul i {
-            --list-icon-color: #198754;
-        }
-
-        .engineer-features {
-            padding-left: 0;
-            list-style: none;
-        }
-
-            .engineer-features li {
-                background-color: rgba(var(--bs-info-rgb), 0.1); /* Light cyan background */
-                padding: 0.75rem 1.25rem;
-                border-radius: 0.3rem;
-                display: inline-flex; /* Use inline-flex for better alignment with gap */
-                align-items: center;
-                gap: 0.6rem;
-                font-size: 0.95rem;
-                color: #087990; /* Darker cyan text */
-                border: 1px solid rgba(var(--bs-info-rgb), 0.2);
-            }
-
-                .engineer-features li i {
-                    color: #0dcaf0; /* Brighter cyan for engineer icons */
-                }
-
-        .btn {
-            padding: 0.75rem 1.25rem;
-            font-weight: 500;
-            border-radius: 0.3rem;
-            transition: all 0.2s ease-in-out; /* Smooth transition for buttons */
-        }
-
-            .btn:hover {
-                filter: brightness(90%); /* Darken button slightly on hover */
-            }
-
-        /* Specific icon colors */
-        .customer-icon {
-            color: #0d6efd;
-        }
-        /* Blue */
-        .company-icon {
-            color: #198754;
-        }
-        /* Green */
-        .engineer-icon {
-            color: #0dcaf0;
-        }
-        /* Cyan */
-
-        /* Modal Styling */
-        .modal-header {
-            border-bottom: 1px solid #dee2e6;
-        }
-
-        .modal-footer {
-            border-top: 1px solid #dee2e6;
-        }
-
-        .login-error {
-            display: none; /* Hide error messages by default */
-            margin-top: 1rem;
-        }
     </style>
 </head>
-<body>
+<body class="text-gray-800 font-sans antialiased">
 
-    <div class="hero-section text-center">
-        <div class="container">
-            <h1 class="display-4">Welcome to FixiBo</h1>
-            <p class="lead">Your complete service management platform</p>
-        </div>
-    </div>
-
-    <div class="container">
-        <div class="row mb-4 justify-content-center">
-            <!-- Customer Card -->
-            <div class="col-lg-5 mb-4">
-                <div class="card h-100 customer-card">
-                    <div class="card-header">
-                        <h3><i class="fas fa-user customer-icon"></i> For Customers</h3>
-                    </div>
-                    <div class="card-body d-flex flex-column">
-                        <p class="text-muted">Manage your product warranties and service requests with ease.</p>
-                        <ul>
-                            <li><i class="fas fa-check-circle"></i> View registered products & projects</li>
-                            <li><i class="fas fa-tools"></i> Request repairs or maintenance</li>
-                            <li><i class="fas fa-truck-fast"></i> Track service status in real-time</li>
-                            <li><i class="fas fa-credit-card"></i> Make secure payments</li>
-                        </ul>
-                        <div class="mt-auto">
-                            <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#customerLoginModal">
-                                Customer Login
-                            </button>
-                        </div>
-                    </div>
+    <!-- Navigation Bar -->
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <a href="#" class="text-2xl font-bold text-blue-600 hover:text-blue-700 transition-colors">FixiBo</a>
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex space-x-6 items-center">
+                    <a href="#features" class="text-gray-600 hover:text-blue-600 transition-colors">Features</a>
+                    <a href="#benefits-company" class="text-gray-600 hover:text-blue-600 transition-colors">For Companies</a>
+                    <a href="#benefits-customer" class="text-gray-600 hover:text-blue-600 transition-colors">For Customers</a>
+                    <a href="#contact" class="text-gray-600 hover:text-blue-600 transition-colors">Contact</a>
+                    <a href="Login/index.html" class="bg-blue-600 text-white px-5 py-2 rounded-md hover:bg-blue-700 transition-all duration-300 transform hover:scale-105 shadow-sm hover:shadow-md">Login / Sign Up</a>
                 </div>
-            </div>
-
-            <!-- Company Card -->
-            <div class="col-lg-5 mb-4">
-                <div class="card h-100 company-card">
-                    <div class="card-header">
-                        <h3><i class="fas fa-building company-icon"></i> For Companies</h3>
-                    </div>
-                    <div class="card-body d-flex flex-column">
-                        <p class="text-muted">Manage products, customers, and engineers with our powerful platform.</p>
-                        <ul>
-                            <li><i class="fas fa-check-circle"></i> Track products & service requests</li>
-                            <li><i class="fas fa-users-cog"></i> Manage engineers & assignments</li>
-                            <li><i class="fas fa-boxes-stacked"></i> Handle inventory & spare parts</li>
-                            <li><i class="fas fa-chart-line"></i> View payment & revenue reports</li>
-                        </ul>
-                        <div class="mt-auto">
-                            <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#companyLoginModal">
-                                Company Login
-                            </button>
-                        </div>
-                    </div>
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden">
+                    <button id="mobile-menu-button" class="text-gray-600 focus:outline-none hover:text-blue-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                        </svg>
+                    </button>
                 </div>
             </div>
         </div>
+        <!-- Mobile Menu (Initially Hidden, controlled by JS) -->
+        <div id="mobile-menu" class="md:hidden bg-white border-t">
+            <a href="#features" class="block px-4 py-3 text-gray-600 hover:bg-gray-100 transition-colors">Features</a>
+            <a href="#benefits-company" class="block px-4 py-3 text-gray-600 hover:bg-gray-100 transition-colors">For Companies</a>
+            <a href="#benefits-customer" class="block px-4 py-3 text-gray-600 hover:bg-gray-100 transition-colors">For Customers</a>
+            <a href="#contact" class="block px-4 py-3 text-gray-600 hover:bg-gray-100 transition-colors">Contact</a>
+            <a href="Login/index.html" class="block px-4 py-3 bg-blue-600 text-white text-center rounded-b-md hover:bg-blue-700 transition-colors duration-300 mx-2 my-2">Login / Sign Up</a>
+        </div>
+    </nav>
 
-        <!-- Service Engineer Card -->
-        <div class="row mt-4 mb-5 justify-content-center">
-            <div class="col-lg-10">
-                <div class="card engineer-card">
-                    <div class="card-header text-center">
-                        <h3><i class="fas fa-hard-hat engineer-icon"></i> For Service Engineers</h3>
+    <!-- Hero Section -->
+    <header class="hero-bg text-white pt-24 pb-16 md:pt-32 md:pb-24" style="padding-top:4rem;">
+        <div class="container mx-auto px-4">
+            <div class="row items-center gy-5">
+                <div class="col-md-6 text-center md:text-left">
+                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 leading-tight drop-shadow-md">Streamline Your Service Management</h1>
+                    <p class="text-lg md:text-xl mb-8 text-blue-100">FixiBo provides a unified platform for seamless warranty tracking, efficient service requests, and enhanced customer-company-engineer communication.</p>
+                    <div class="flex flex-col sm:flex-row justify-center md:justify-start gap-4">
+                        <a href="#contact" class="bg-white text-blue-600 px-8 py-3 rounded-md font-semibold text-lg hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow hover:shadow-lg">Request a Demo</a>
+                        <a href="#features" class="border-2 border-white text-white px-8 py-3 rounded-md font-semibold text-lg hover:bg-white hover:text-blue-600 transition-all duration-300 transform hover:scale-105">Learn More</a>
                     </div>
-                    <div class="card-body text-center">
-                        <p class="text-muted mb-4">Manage your service jobs efficiently with our dedicated tools.</p>
-                        <ul class="list-unstyled d-flex flex-wrap justify-content-center gap-3 mb-4 engineer-features">
-                            <li><i class="fas fa-tasks"></i> View assigned jobs</li>
-                            <li><i class="fas fa-sync-alt"></i> Update service status</li>
-                            <li><i class="fas fa-file-alt"></i> Create service reports</li>
-                            <li><i class="fas fa-cogs"></i> Request spare parts</li>
-                        </ul>
-                        <button type="button" class="btn btn-info px-4" data-bs-toggle="modal" data-bs-target="#engineerLoginModal">
-                            Engineer Login
-                        </button>
+                </div>
+                <div class="col-md-6">
+                    <center>
+                        <img src="Images/Fixibo_hero.png" style="max-width:75%;" />
+                    </center>
+           
+                    
+
+    
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Features Section -->
+    <section id="features" class="py-16 lg:py-20 bg-slate-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-800">Powerful Features for Everyone</h2>
+            <div class="row gy-5 gx-lg-5">
+                <!-- Feature Card Template -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="bg-white p-6 rounded-lg shadow-md h-full text-center hover-lift">
+                        <div class="inline-flex items-center justify-center w-16 h-16 mb-5 bg-blue-100 text-blue-600 rounded-full">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8"><path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /></svg> <!-- User Icon -->
+                        </div>
+                        <h3 class="text-xl font-semibold mb-3">Customer Portal</h3>
+                        <p class="text-gray-600">Easy OTP login, product/warranty viewing, simple service request creation, status tracking, and quote approvals.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="bg-white p-6 rounded-lg shadow-md h-full text-center hover-lift">
+                        <div class="inline-flex items-center justify-center w-16 h-16 mb-5 bg-blue-100 text-blue-600 rounded-full">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 21h19.5m-18-18h16.5M2.25 9h16.5m-16.5 6H12m6.03-10.03 L18.75 3l-1.72 1.72M12 3l1.72 1.72M6.03 3l1.72 1.72m-1.72 0h11.94M6 21v-1.5M12 21v-1.5m6 0v-1.5M3.75 15H12m0 0V9h4.5M12 9v6m0 0H9.75M12 9H3.75m0 0v6h6M12 15h6.75" /></svg> <!-- Building Icon -->
+                        </div>
+                        <h3 class="text-xl font-semibold mb-3">Company Dashboard</h3>
+                        <p class="text-gray-600">Manage products, customers, engineers, service requests, schedules, quote reviews, and view insightful reports.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="bg-white p-6 rounded-lg shadow-md h-full text-center hover-lift">
+                        <div class="inline-flex items-center justify-center w-16 h-16 mb-5 bg-blue-100 text-blue-600 rounded-full">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" /></svg> <!-- User Circle Icon -->
+                        </div>
+                        <h3 class="text-xl font-semibold mb-3">Engineer Portal</h3>
+                        <p class="text-gray-600">View assigned jobs, update status in real-time, manage schedules, and create quotes for company review.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="bg-white p-6 rounded-lg shadow-md h-full text-center hover-lift">
+                        <div class="inline-flex items-center justify-center w-16 h-16 mb-5 bg-blue-100 text-blue-600 rounded-full">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg> <!-- Check Badge Icon -->
+                        </div>
+                        <h3 class="text-xl font-semibold mb-3">Warranty Management</h3>
+                        <p class="text-gray-600">Automatically track warranty status for products and projects based on purchase/completion dates.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="bg-white p-6 rounded-lg shadow-md h-full text-center hover-lift">
+                        <div class="inline-flex items-center justify-center w-16 h-16 mb-5 bg-blue-100 text-blue-600 rounded-full">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m5.231 13.481L15 17.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Zm3.75 11.625a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" /></svg> <!-- Clipboard Document Check Icon -->
+                        </div>
+                        <h3 class="text-xl font-semibold mb-3">Controlled Quote Workflow</h3>
+                        <p class="text-gray-600">Engineers submit quotes for out-of-warranty work, companies review/approve before customers see them.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="bg-white p-6 rounded-lg shadow-md h-full text-center hover-lift">
+                        <div class="inline-flex items-center justify-center w-16 h-16 mb-5 bg-blue-100 text-blue-600 rounded-full">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75c0 .621-.504 1.125-1.125 1.125h-2.25A1.125 1.125 0 0 1 3 21v-7.875ZM12.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v12.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM10.5 18.75c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v2.625c0 .621-.504 1.125-1.125 1.125h-2.25A1.125 1.125 0 0 1 10.5 21.375V18.75Z" /></svg> <!-- Chart Bar Icon -->
+                        </div>
+                        <h3 class="text-xl font-semibold mb-3">Reporting & Analytics</h3>
+                        <p class="text-gray-600">Gain insights into service performance, engineer efficiency, and customer satisfaction metrics.</p>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 
-    <!-- Customer Login Modal -->
-    <div class="modal fade" id="customerLoginModal" tabindex="-1" aria-labelledby="customerLoginModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="customerLoginModalLabel"><i class="fas fa-user customer-icon me-2"></i>Customer Login</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <!-- Benefits for Companies Section -->
+    <section id="benefits-company" class="py-16 lg:py-20">
+        <div class="container mx-auto px-4">
+            <div class="row items-center gy-5">
+                <div class="col-md-6">
+                    
+                        <img src="Images/Company_benefits.png" />
+                    
                 </div>
-                <div class="modal-body">
-                    <form id="customerLoginForm">
-                        <div class="mb-3">
-                            <label for="customerEmail" class="form-label">Email address</label>
-                            <input type="email" class="form-control" id="customerEmail" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="customerPassword" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="customerPassword" required>
-                        </div>
-                        <div class="alert alert-danger login-error" role="alert" id="customerLoginError">
-                            Incorrect username or password.
-                        </div>
-                        <button type="submit" class="btn btn-primary w-100">Login</button>
-                    </form>
+                <div class="col-md-6 md:ps-lg-5">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-6 text-gray-800">Why FixiBo for Your <span class="text-blue-600">Company</span>?</h2>
+                    <ul class="space-y-4 text-lg text-gray-700">
+                        <li class="flex items-start">
+                            <svg class="w-6 h-6 text-green-500 mr-3 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                            <span><strong class="font-semibold text-gray-800">Reduce Administrative Overhead:</strong> Digitize service requests, eliminate paperwork, and streamline tracking.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-6 h-6 text-green-500 mr-3 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                            <span><strong class="font-semibold text-gray-800">Increase Engineer Efficiency:</strong> Clear job assignments, mobile status updates, and optimized scheduling.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-6 h-6 text-green-500 mr-3 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                            <span><strong class="font-semibold text-gray-800">Improve Quality Control:</strong> Review and approve quotes before they reach the customer, ensuring accuracy.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-6 h-6 text-green-500 mr-3 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                            <span><strong class="font-semibold text-gray-800">Data-Driven Decisions:</strong> Leverage reports on service times, costs, and satisfaction to optimize operations.</span>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 
-    <!-- Company Login Modal -->
-    <div class="modal fade" id="companyLoginModal" tabindex="-1" aria-labelledby="companyLoginModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="companyLoginModalLabel"><i class="fas fa-building company-icon me-2"></i>Company Login</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <!-- Benefits for Customers Section -->
+    <section id="benefits-customer" class="py-16 lg:py-20 bg-slate-50">
+        <div class="container mx-auto px-4">
+            <div class="row items-center flex-column-reverse flex-md-row gy-5">
+                <div class="col-md-6 md:pe-lg-5">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-6 text-gray-800">Benefits for Your <span class="text-blue-600">Customers</span></h2>
+                    <ul class="space-y-4 text-lg text-gray-700">
+                        <li class="flex items-start">
+                            <svg class="w-6 h-6 text-green-500 mr-3 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                            <span><strong class="font-semibold text-gray-800">Effortless Service Requests:</strong> Easily submit requests online anytime via phone number and OTP.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-6 h-6 text-green-500 mr-3 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                            <span><strong class="font-semibold text-gray-800">Transparent Tracking:</strong> Monitor service request status and engineer visit schedules in real-time.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-6 h-6 text-green-500 mr-3 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                            <span><strong class="font-semibold text-gray-800">Clear Communication:</strong> Receive notifications and approve/reject quotes directly through the portal.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-6 h-6 text-green-500 mr-3 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                            <span><strong class="font-semibold text-gray-800">Improved Satisfaction:</strong> A smooth, transparent service experience leads to happier customers.</span>
+                        </li>
+                    </ul>
                 </div>
-                <div class="modal-body">
-                    <form id="companyLoginForm">
-                        <div class="mb-3">
-                            <label for="companyEmail" class="form-label">Company Email</label>
-                            <input type="email" class="form-control" id="companyEmail" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="companyPassword" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="companyPassword" required>
-                        </div>
-                        <div class="alert alert-danger login-error" role="alert" id="companyLoginError">
-                            Incorrect username or password.
-                        </div>
-                        <button type="submit" class="btn btn-success w-100">Login</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+                <div class="col-md-6">
 
-    <!-- Engineer Login Modal -->
-    <div class="modal fade" id="engineerLoginModal" tabindex="-1" aria-labelledby="engineerLoginModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="engineerLoginModalLabel"><i class="fas fa-hard-hat engineer-icon me-2"></i>Engineer Login</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="engineerLoginForm">
-                        <div class="mb-3">
-                            <label for="engineerId" class="form-label">Engineer ID / Email</label>
-                            <input type="text" class="form-control" id="engineerId" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="engineerPassword" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="engineerPassword" required>
-                        </div>
-                        <div class="alert alert-danger login-error" role="alert" id="engineerLoginError">
-                            Incorrect username or password.
-                        </div>
-                        <button type="submit" class="btn btn-info w-100 text-white">Login</button>
-                    </form>
+                    <img src="Images/Customer_benefits.png" />
+
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 
-    <!-- Bootstrap JS Bundle (includes Popper) -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <!-- How It Works Section -->
+    <section class="py-16 lg:py-20">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-800">Simple Steps to Resolution</h2>
+            <div class="row text-center gy-5 gx-lg-5">
+                <!-- Step 1 -->
+                <div class="col-sm-6 col-lg-3">
+                    <div class="bg-white border border-gray-200 p-6 rounded-lg h-full flex flex-col items-center justify-start shadow-sm hover-lift">
+                        <div class="flex items-center justify-center w-16 h-16 mb-4 bg-blue-100 text-blue-600 rounded-full text-2xl font-bold">1</div>
+                        <h4 class="text-lg font-semibold mb-2 text-gray-800">Request Service</h4>
+                        <p class="text-sm text-gray-600">Customer submits request via easy-to-use portal.</p>
+                    </div>
+                </div>
+                <!-- Step 2 -->
+                <div class="col-sm-6 col-lg-3">
+                    <div class="bg-white border border-gray-200 p-6 rounded-lg h-full flex flex-col items-center justify-start shadow-sm hover-lift">
+                        <div class="flex items-center justify-center w-16 h-16 mb-4 bg-blue-100 text-blue-600 rounded-full text-2xl font-bold">2</div>
+                        <h4 class="text-lg font-semibold mb-2 text-gray-800">Assign & Schedule</h4>
+                        <p class="text-sm text-gray-600">Company assigns available engineer and schedules visit.</p>
+                    </div>
+                </div>
+                <!-- Step 3 -->
+                <div class="col-sm-6 col-lg-3">
+                    <div class="bg-white border border-gray-200 p-6 rounded-lg h-full flex flex-col items-center justify-start shadow-sm hover-lift">
+                        <div class="flex items-center justify-center w-16 h-16 mb-4 bg-blue-100 text-blue-600 rounded-full text-2xl font-bold">3</div>
+                        <h4 class="text-lg font-semibold mb-2 text-gray-800">Service & Quote</h4>
+                        <p class="text-sm text-gray-600">Engineer performs service / creates reviewed quote (if needed).</p>
+                    </div>
+                </div>
+                <!-- Step 4 -->
+                <div class="col-sm-6 col-lg-3">
+                    <div class="bg-white border border-gray-200 p-6 rounded-lg h-full flex flex-col items-center justify-start shadow-sm hover-lift">
+                        <div class="flex items-center justify-center w-16 h-16 mb-4 bg-blue-100 text-blue-600 rounded-full text-2xl font-bold">4</div>
+                        <h4 class="text-lg font-semibold mb-2 text-gray-800">Completion</h4>
+                        <p class="text-sm text-gray-600">Job completed, status updated, customer provides feedback.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    <!-- Custom JS for Modal Login -->
+    <!-- Call to Action Section -->
+    <section id="contact" class="py-16 lg:py-20 bg-blue-600 text-white">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4 drop-shadow">Ready to Transform Your Service Management?</h2>
+            <p class="text-lg md:text-xl mb-8 text-blue-100 max-w-3xl mx-auto">See FixiBo in action and discover how it can benefit your business and your customers. Get in touch for a personalized demo.</p>
+            <a href="#" class="bg-white text-blue-600 px-10 py-3 rounded-md font-semibold text-lg hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow hover:shadow-lg">Request a Demo Today</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-10 bg-gray-800 text-gray-400">
+        <div class="container mx-auto px-4">
+            <div class="row gy-4">
+                <!-- Brand/About -->
+                <div class="col-lg-4 col-md-6">
+                    <h5 class="text-xl font-bold text-white mb-3">FixiBo</h5>
+                    <p class="text-sm mb-4">Streamlining service management for a better experience, connecting companies, engineers, and customers.</p>
+                    <!-- Social Media Icons -->
+                    <div class="flex space-x-4">
+                        <a href="#" aria-label="Facebook" class="text-gray-400 hover:text-white transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z" /></svg>
+                        </a>
+                        <a href="#" aria-label="Twitter" class="text-gray-400 hover:text-white transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-.422.724-.665 1.564-.665 2.457 0 1.488.76 2.795 1.913 3.563-.706-.023-1.364-.215-1.941-.534v.057c0 2.083 1.48 3.818 3.444 4.212-.359.097-.738.148-1.13.148-.276 0-.544-.027-.807-.078.545 1.705 2.127 2.946 4.009 2.981-1.47 1.147-3.319 1.829-5.334 1.829-.347 0-.689-.02-1.024-.06C3.49 20.29 5.782 21 8.29 21c7.577 0 11.902-6.293 11.63-11.901.8-.577 1.488-1.29 2.024-2.084z" /></svg>
+                        </a>
+                        <a href="#" aria-label="LinkedIn" class="text-gray-400 hover:text-white transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path d="M4.98 3.5c0 1.381-1.11 2.5-2.48 2.5s-2.48-1.119-2.48-2.5c0-1.38 1.11-2.5 2.48-2.5s2.48 1.12 2.48 2.5zm.02 4.5h-5v16h5v-16zm7.982 0h-4.968v16h4.969v-8.399c0-4.67 6.029-5.052 6.029 0v8.399h4.988v-10.131c0-7.88-8.922-7.594-11.018-3.714v-2.155z" /></svg>
+                        </a>
+                    </div>
+                </div>
+                <!-- Quick Links -->
+                <div class="col-lg-2 col-md-3 col-sm-6">
+                    <h6 class="text-lg font-semibold text-white mb-3">Quick Links</h6>
+                    <ul class="text-sm space-y-2">
+                        <li><a href="#features" class="hover:text-white transition-colors">Features</a></li>
+                        <li><a href="#benefits-company" class="hover:text-white transition-colors">For Companies</a></li>
+                        <li><a href="#benefits-customer" class="hover:text-white transition-colors">For Customers</a></li>
+                        <li><a href="#contact" class="hover:text-white transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+                <!-- Legal -->
+                <div class="col-lg-2 col-md-3 col-sm-6">
+                    <h6 class="text-lg font-semibold text-white mb-3">Legal</h6>
+                    <ul class="text-sm space-y-2">
+                        <li><a href="#" class="hover:text-white transition-colors">Privacy Policy</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <!-- Contact -->
+                <div class="col-lg-4 col-md-12">
+                    <h6 class="text-lg font-semibold text-white mb-3">Contact Us</h6>
+                    <p class="text-sm mb-1">Email: <a href="mailto:info@fixibo.com" class="hover:text-white transition-colors">info@fixibo.com</a></p>
+                    <p class="text-sm">Phone: <a href="tel:+91-8169443196" class="hover:text-white transition-colors">+91-8169443196</a></p>
+                </div>
+            </div>
+            <hr class="border-gray-700 my-6">
+            <p class="text-center text-sm">© 2025 FixiBo. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Simple JS for Mobile Menu Toggle -->
     <script>
-        // Function to handle login form submission
-        function handleLoginSubmit(event, errorElementId) {
-            event.preventDefault(); // Prevent default form submission
-            const errorElement = document.getElementById(errorElementId);
-            if (errorElement) {
-                errorElement.style.display = 'block'; // Show the error message
-            }
-            // In a real application, you would add AJAX call here to verify credentials
-        }
+        const menuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileMenuLinks = mobileMenu.querySelectorAll('a'); // Get all links in the mobile menu
 
-        // Add event listeners to forms
-        document.getElementById('customerLoginForm')?.addEventListener('submit', (event) => {
-            handleLoginSubmit(event, 'customerLoginError');
-        });
+        if (menuButton && mobileMenu) {
+            menuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('active'); // Use 'active' class to control visibility/animation
 
-        document.getElementById('companyLoginForm')?.addEventListener('submit', (event) => {
-            handleLoginSubmit(event, 'companyLoginError');
-        });
-
-        document.getElementById('engineerLoginForm')?.addEventListener('submit', (event) => {
-            handleLoginSubmit(event, 'engineerLoginError');
-        });
-
-        // Optional: Hide error message when modal is closed or user starts typing again
-        const modals = document.querySelectorAll('.modal');
-        modals.forEach(modal => {
-            modal.addEventListener('hidden.bs.modal', () => {
-                const errorElement = modal.querySelector('.login-error');
-                if (errorElement) {
-                    errorElement.style.display = 'none'; // Hide error on modal close
-                }
-                const form = modal.querySelector('form');
-                if (form) {
-                    // form.reset(); // Uncomment to clear form fields on close
-                }
+                // Optional: Toggle aria-expanded attribute for accessibility
+                const isExpanded = menuButton.getAttribute('aria-expanded') === 'true';
+                menuButton.setAttribute('aria-expanded', !isExpanded);
             });
 
-            // Hide error if user types in an input field
-            const inputs = modal.querySelectorAll('input');
-            inputs.forEach(input => {
-                input.addEventListener('input', () => {
-                    const errorElement = modal.querySelector('.login-error');
-                    if (errorElement && errorElement.style.display === 'block') {
-                        errorElement.style.display = 'none';
-                    }
+            // Add event listeners to each link to close the menu when a link is clicked
+            mobileMenuLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.remove('active');
+                    menuButton.setAttribute('aria-expanded', 'false');
                 });
             });
-        });
-
+        }
     </script>
-
 </body>
 </html>

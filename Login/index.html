@@ -116,26 +116,53 @@
             --list-icon-color: #198754;
         }
 
+        /* Engineer Features Section Styling */
         .engineer-features {
             padding-left: 0;
             list-style: none;
+            /* These styles are applied to the UL container */
+            display: flex; /* Enable flexbox */
+            flex-wrap: wrap; /* Allow items to wrap to the next line */
+            justify-content: center; /* Center items horizontally */
+            gap: 0.75rem; /* Space between items (Bootstrap gap-3 equivalent is often 1rem, adjust if needed) */
         }
 
             .engineer-features li {
+                /* These styles are applied to each LI item */
                 background-color: rgba(var(--bs-info-rgb), 0.1); /* Light cyan background */
                 padding: 0.75rem 1.25rem;
                 border-radius: 0.3rem;
-                display: inline-flex; /* Use inline-flex for better alignment with gap */
+                display: inline-flex; /* Use inline-flex for internal alignment of icon/text */
                 align-items: center;
                 gap: 0.6rem;
                 font-size: 0.95rem;
                 color: #087990; /* Darker cyan text */
                 border: 1px solid rgba(var(--bs-info-rgb), 0.2);
+                /* Default behavior: width based on content */
+                flex-grow: 0; /* Don't grow by default */
+                flex-shrink: 0; /* Don't shrink by default */
             }
 
                 .engineer-features li i {
                     color: #0dcaf0; /* Brighter cyan for engineer icons */
                 }
+
+        /* --- START: Added/Modified CSS for uniform width on mobile --- */
+        @media (max-width: 767.98px) { /* Target screens smaller than Bootstrap's 'md' breakpoint */
+            .engineer-features {
+                gap: 0.5rem; /* Slightly reduce gap on smaller screens */
+            }
+
+                .engineer-features li {
+                    flex-grow: 1; /* Allow items to grow to fill space on their line */
+                    flex-basis: 0; /* Base width is 0, size determined by flex-grow */
+                    /* flex-basis: auto; might also work well depending on content variation */
+                    justify-content: center; /* Center the icon and text within the now wider li */
+                    min-width: 140px; /* Optional: ensure items don't get TOO narrow if there are many */
+                }
+        }
+        /* --- END: Added/Modified CSS --- */
+
 
         .btn {
             padding: 0.75rem 1.25rem;
@@ -179,6 +206,7 @@
 </head>
 <body>
 
+    <!-- (Rest of the HTML body remains the same) -->
     <div class="hero-section text-center">
         <div class="container">
             <h1 class="display-4">Welcome to FixiBo</h1>
@@ -244,13 +272,16 @@
                     </div>
                     <div class="card-body text-center">
                         <p class="text-muted mb-4">Manage your service jobs efficiently with our dedicated tools.</p>
+                        <!-- Applied flexbox directly to UL -->
                         <ul class="list-unstyled d-flex flex-wrap justify-content-center gap-3 mb-4 engineer-features">
+                            <!-- Removed inline styles, relying on CSS class -->
                             <li><i class="fas fa-tasks"></i> View assigned jobs</li>
                             <li><i class="fas fa-sync-alt"></i> Update service status</li>
                             <li><i class="fas fa-file-alt"></i> Create service reports</li>
                             <li><i class="fas fa-cogs"></i> Request spare parts</li>
                         </ul>
-                        <button type="button" class="btn btn-info px-4" data-bs-toggle="modal" data-bs-target="#engineerLoginModal">
+                        <button type="button" class="btn btn-info px-4 text-white" data-bs-toggle="modal" data-bs-target="#engineerLoginModal">
+                            <!-- Added text-white for better contrast -->
                             Engineer Login
                         </button>
                     </div>
@@ -356,6 +387,13 @@
                 errorElement.style.display = 'block'; // Show the error message
             }
             // In a real application, you would add AJAX call here to verify credentials
+            console.log(`Attempting login for form associated with error ID: ${errorElementId}`);
+            // Simulate failed login for demo purposes after a short delay
+            // setTimeout(() => {
+            //    if (errorElement) {
+            //       errorElement.style.display = 'block';
+            //    }
+            // }, 500);
         }
 
         // Add event listeners to forms
@@ -382,6 +420,8 @@
                 const form = modal.querySelector('form');
                 if (form) {
                     // form.reset(); // Uncomment to clear form fields on close
+                    const errorElement = form.querySelector('.login-error'); // Also hide error on reset if uncommented
+                    if (errorElement) errorElement.style.display = 'none';
                 }
             });
 
